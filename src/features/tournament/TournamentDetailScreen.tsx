@@ -31,7 +31,7 @@ export default function TournamentDetailScreen() {
         const playerBalls = balls.filter(b => b.inningId === inningId);
         // Batting Stats
         const runs = playerBalls.filter(b => b.strikerId === playerId).reduce((sum, b) => sum + b.runsScored, 0);
-        const ballsFaced = playerBalls.filter(b => b.strikerId === playerId && b.isValidBall).length;
+        const ballsFaced = playerBalls.filter(b => b.strikerId === playerId && (b.isValidBall || b.extrasType === 'NO_BALL')).length;
 
         // Bowling Stats
         const bowlingBalls = playerBalls.filter(b => b.bowlerId === playerId);

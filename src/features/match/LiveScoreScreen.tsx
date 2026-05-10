@@ -232,7 +232,7 @@ export default function LiveScoreScreen() {
                 const pName = getPlayerName(id);
                 const pBalls = inningBalls.filter(b => b.strikerId === id);
                 const runs = pBalls.reduce((s, b) => s + b.runsScored, 0);
-                const ballCount = pBalls.filter(b => b.isValidBall).length;
+                const ballCount = pBalls.filter(b => b.isValidBall || b.extrasType === 'NO_BALL').length;
                 const fours = pBalls.filter(b => b.runsScored === 4 && b.isBoundary).length;
                 const sixes = pBalls.filter(b => b.runsScored === 6 && b.isBoundary).length;
                 const sr = ballCount > 0 ? ((runs / ballCount) * 100).toFixed(1) : '0.0';
@@ -386,7 +386,7 @@ export default function LiveScoreScreen() {
             if (targetInning) {
                 const playerBalls = targetBalls.filter(b => b.strikerId === id);
                 runs = playerBalls.reduce((sum, b) => sum + b.runsScored, 0);
-                ballsFaced = playerBalls.filter(b => b.isValidBall).length;
+                ballsFaced = playerBalls.filter(b => b.isValidBall || b.extrasType === 'NO_BALL').length;
                 fours = playerBalls.filter(b => b.runsScored === 4 && b.isBoundary).length;
                 sixes = playerBalls.filter(b => b.runsScored === 6 && b.isBoundary).length;
                 sr = ballsFaced > 0 ? ((runs / ballsFaced) * 100).toFixed(2) : '0.00';
@@ -903,7 +903,7 @@ export default function LiveScoreScreen() {
         if (!currentInning) return '';
         const playerBalls = allBalls.filter(b => b.strikerId === playerId);
         const runs = playerBalls.reduce((sum, b) => sum + b.runsScored, 0);
-        const balls = playerBalls.filter(b => b.isValidBall).length;
+        const balls = playerBalls.filter(b => b.isValidBall || b.extrasType === 'NO_BALL').length;
         const fours = playerBalls.filter(b => b.runsScored === 4 && b.isBoundary).length;
         const sixes = playerBalls.filter(b => b.runsScored === 6 && b.isBoundary).length;
         return `${runs}(${balls})  4s: ${fours}  6s: ${sixes}`;
@@ -1019,7 +1019,7 @@ export default function LiveScoreScreen() {
         inningBalls.forEach((b, i) => {
             // Add runs and balls
             currentRuns += (b.runsScored + b.extrasRuns);
-            if (b.isValidBall) currentBalls++;
+            if (b.isValidBall || b.extrasType === 'NO_BALL') currentBalls++;
 
             // If Wicket or Retired Hurt, end partnership
             if (b.isWicket || b.wicketType === 'RETIRED_HURT') {
